@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Tutorial : MonoBehaviour
 {
-
+    // Aþaðýdaki kodlarý çalýþtýrmak istediðiniz kodlar dýþýndakileri açýklama satýrý yapip tek tek incelemenizi öneririm
     public void Start()
     {
         // 1. Sayýsal iþlemler
@@ -156,7 +156,7 @@ public class Tutorial : MonoBehaviour
         Debug.Log(stringListesi[0]); // "Naber" yazdýrýlýr
     }
 
-    void Update()
+    public void Update()
     {
 
     }
