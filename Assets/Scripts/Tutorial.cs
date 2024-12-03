@@ -1,14 +1,14 @@
-using System.Collections.Generic;
-using UnityEngine;
+using System.Collections.Generic; // Liste ve koleksiyonlar için gerekli kütüphane.
+using UnityEngine; // Unity’nin temel kütüphanesi.
 
 public class Tutorial : MonoBehaviour
 {
-    // Aþaðýdaki kodlarý çalýþtýrmak istediðiniz kodlar dýþýndakileri açýklama satýrý yapip tek tek incelemenizi öneririm
+    // Baþlangýç metodu. Unity'de `Start` metodu, oyun baþladýðýnda bir defa çalýþýr.
     public void Start()
     {
-        // 1. Sayýsal iþlemler
-        int sayi1 = 10;
-        int sayi2 = 20;
+        // **1. Sayýsal Ýþlemler**: Temel matematik iþlemleri.
+        int sayi1 = 10; // Tam sayý deðiþkeni tanýmlandý.
+        int sayi2 = 20; // Ýkinci tam sayý deðiþkeni tanýmlandý.
 
         // Toplama iþlemi
         Debug.Log("Topla: " + (sayi1 + sayi2));
@@ -19,15 +19,15 @@ public class Tutorial : MonoBehaviour
         // Çarpma iþlemi
         Debug.Log("Çarp: " + (sayi1 * sayi2));
 
-        // Bölme iþlemi
+        // Bölme iþlemi (sonuç tam sayý olur çünkü `int` kullanýlýyor)
         Debug.Log("Böl: " + (sayi1 / sayi2));
 
         // Modül (kalan) alma iþlemi
         Debug.Log("Mod alma: " + (sayi1 % sayi2));
 
-        // 2. Ondalýk sayýlar ile iþlemler
-        float sayi3 = 0.5f;
-        float sayi4 = 3.41f;
+        // **2. Ondalýk Sayýlar ile Ýþlemler**: `float` türündeki deðiþkenler.
+        float sayi3 = 0.5f; // Ondalýk sayý deðiþkeni.
+        float sayi4 = 3.41f; // Ýkinci ondalýk sayý.
 
         // Toplama iþlemi
         Debug.Log("Topla: " + (sayi3 + sayi4));
@@ -41,43 +41,42 @@ public class Tutorial : MonoBehaviour
         // Bölme iþlemi
         Debug.Log("Böl: " + (sayi3 / sayi4));
 
-        // Modül alma iþlemi (ondalýk sayýlar için)
-        Debug.Log("Mod alma: " + (sayi3 % sayi4));
+        // Mod alma iþlemi (float için desteklenmez; çýkarýlabilir)
 
-        // 3. String iþlemleri
-        string metin1 = "Merhaba";
+        // **3. String Ýþlemleri**: Metinsel ifadeler.
+        string metin1 = "Merhaba"; // Metinsel bir deðiþken.
 
         // String deðeri yazdýrma
         Debug.Log(metin1);
 
-        // 4. Boolean (Mantýksal) deðerler
-        bool durum1 = true;
-        bool durum2 = false;
+        // **4. Boolean (Mantýksal) Deðerler**: `true` veya `false` deðerleri.
+        bool durum1 = true; // Mantýksal doðru.
+        bool durum2 = false; // Mantýksal yanlýþ.
 
-        // 5. Deðiþkenler ile karþýlaþtýrmalar
-        string isim = "MaliPrime";
-        float hiz = 2.5f;
-        int yas = 20;
+        // **5. Deðiþkenler ile Karþýlaþtýrmalar**: Koþullarýn kontrolü.
+        string isim = "MaliPrime"; // String deðiþkeni.
+        float hiz = 2.5f; // Ondalýk bir deðiþken.
+        int yas = 20; // Tam sayý deðiþkeni.
 
-        // Eþitlik ve karþýlaþtýrma örnekleri
-        if (yas == 20)
+        // Yaþ deðerini kontrol etme
+        if (yas == 20) // Eþitlik kontrolü.
         {
             Debug.Log("Yaþ 20'ye eþit.");
         }
-        if (yas != 30)
+        if (yas != 30) // Eþit olmama kontrolü.
         {
             Debug.Log("Yaþ 30'a eþit deðil.");
         }
-        if (yas < 25)
+        if (yas < 25) // Küçüklük kontrolü.
         {
             Debug.Log("Yaþ 25'ten küçük.");
         }
-        if (yas >= 20)
+        if (yas >= 20) // Büyük veya eþitlik kontrolü.
         {
             Debug.Log("Yaþ 20'ye eþit veya büyük.");
         }
 
-        // 6. if-else if-else yapýsý
+        // **6. If-Else If-Else Yapýsý**: Çoklu koþullar.
         int sayi5 = 35;
 
         if (sayi5 > 90)
@@ -97,8 +96,9 @@ public class Tutorial : MonoBehaviour
             Debug.Log("30'dan küçük");
         }
 
-        // 7. Switch-case yapýsý
+        // **7. Switch-Case Yapýsý**: Sabit deðerlerle koþullar.
         string metin2 = "eajhhjsfdbhfbfsd";
+
         switch (metin2)
         {
             case "hoþçakal":
@@ -112,52 +112,72 @@ public class Tutorial : MonoBehaviour
                 break;
         }
 
-        // Zorluk seviyesi için switch örneði
-        string zorluk = "kolay";
-        switch (zorluk)
-        {
-            case "kolay":
-                Debug.Log("Kolay seçtiniz");
-                break;
-            case "orta":
-                Debug.Log("Orta seçtiniz");
-                break;
-            case "zor":
-                Debug.Log("Zor seçtiniz");
-                break;
-        }
-
-        // 8. Dizi kullanýmý (Array)
-        int[] dizi1 = new int[10]; // 10 elemanlý bir dizi oluþturuluyor
-        dizi1[0] = 20; // Ýlk elemana 20 atanýyor
-        dizi1[1] = 30; // Ýkinci elemana 30 atanýyor
-        dizi1[2] = 40; // Üçüncü elemana 40 atanýyor
-        dizi1[9] = 50; // Son elemana 50 atanýyor
+        // **8. Dizi (Array) Kullanýmý**: Sabit boyutlu koleksiyonlar.
+        int[] dizi1 = new int[10]; // 10 elemanlý bir tam sayý dizisi.
+        dizi1[0] = 20; // Ýlk eleman.
+        dizi1[1] = 30; // Ýkinci eleman.
+        dizi1[2] = 40; // Üçüncü eleman.
+        dizi1[9] = 50; // Son eleman.
 
         // Dizi elemanlarýný yazdýrma
-        Debug.Log(dizi1[0]); // 20 yazdýrýlýr
-        Debug.Log(dizi1[100]); // Burada hata alýrsýnýz, çünkü dizi sadece 10 elemanlýdýr.
+        Debug.Log(dizi1[0]); // 20
+        // Debug.Log(dizi1[100]); // Hata verir: Dizi sýnýrý dýþýnda.
 
-        // 9. String dizisi örneði
+        // **9. String Dizisi Örneði**: Metinlerden oluþan diziler.
         string[] günler = {
             "Pazartesi", "Salý", "Çarþamba", "Perþembe", "Cuma", "Cumartesi", "Pazar"
         };
 
         // Dizi elemanýný yazdýrma
-        Debug.Log(günler[6]); // Pazar yazdýrýlýr
+        Debug.Log(günler[6]); // Pazar
 
-        // 10. Liste (List) kullanýmý
-        List<string> stringListesi = new List<string>();
+        // **10. Liste (List) Kullanýmý**: Dinamik koleksiyonlar.
+        List<string> stringListesi = new List<string>(); // String listesi oluþturma.
 
         // Listeye eleman ekleme
         stringListesi.Add("Naber");
+        stringListesi.Add("Naber1");
 
-        // Liste elemanýný yazdýrma
-        Debug.Log(stringListesi[0]); // "Naber" yazdýrýlýr
+        // Elemanlarý döngüyle yazdýrma
+        foreach (string item in stringListesi)
+        {
+            Debug.Log(item);
+        }
+
+        // **11. Fonksiyon Kullanýmý**: Kod tekrarý için fonksiyonlar.
+        Fonksiyon1(); // Ýlk fonksiyon çaðrýsý.
+
+        Fonskiyon2("Deneme 1"); // Parametreli fonksiyon.
+
+        int carpim = Fonksiyon3(); // Deðer döndüren fonksiyon.
+        Debug.Log(carpim);
+
+        Debug.Log(Fonksiyon4(5, 8)); // Parametre alýp dönen fonksiyon.
     }
 
     public void Update()
     {
+        // Oyun sýrasýnda sürekli çalýþan metod.
+    }
 
+    void Fonksiyon1()
+    {
+        Debug.Log("Fonksiyon 1");
+    }
+
+    void Fonskiyon2(string metin)
+    {
+        Debug.Log("Fonksiyon2: " + metin);
+    }
+
+    int Fonksiyon3()
+    {
+        int sayi1 = 10, sayi2 = 20;
+        return sayi1 * sayi2; // Çarpým sonucu döndürülüyor.
+    }
+
+    int Fonksiyon4(int sayi1, int sayi2)
+    {
+        return sayi1 * sayi2; // Parametrelerin çarpýmý.
     }
 }
