@@ -2,49 +2,77 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Rigidbody2D bileşeni referansı
-    public Rigidbody2D rigidbody;
+    // Rigidbody2D bileÅŸeni referansÄ±
+    private Rigidbody2D rigidbody;
+
+    public float speed;
+    public float jumpForce;
+    public GameObject zeminKontrol;
+    public LayerMask groundLayer;
 
     public void Start()
     {
-        // Oyun başladığında çalışacak olan başlangıç kodları burada yer alır.
+        // Oyun baÅŸladÄ±ÄŸÄ±nda Ã§alÄ±ÅŸacak olan baÅŸlangÄ±Ã§ kodlarÄ± burada yer alÄ±r.
+        rigidbody = GetComponent<Rigidbody2D>();
     }
 
     public void Update()
     {
-        // Yatay eksendeki oyuncu girdi değerini alıyoruz.
-        float x = Input.GetAxis("Horizontal");
-        // "Horizontal" Unity’nin varsayılan giriş eksenidir ve genellikle A-D veya Sol-Sağ ok tuşlarıyla kontrol edilir.
-
-        // Hareket vektörü oluşturuluyor.
-        Vector2 vector = new Vector2(x, rigidbody.linearVelocityY) * 5;
-        // Hareket hızı 5 ile çarpılıyor ve mevcut dikey hız korunuyor.
-
-        // **1. transform.Translate**
-        // `transform.Translate` nesnenin pozisyonunu doğrudan değiştirir.
-        // Fizik motorunu dikkate almaz, bu nedenle çarpışmalar gibi fizik olaylarını işlemez.
-        // Yorum satırından kaldırarak deneyebilirsiniz:
-        // transform.Translate(vector * Time.deltaTime);
-        // Time.deltaTime kullanarak frame-rate bağımsız hareket elde edilir.
-
-        // **2. Rigidbody2D.AddForce**
-        // `AddForce` bir kuvvet uygular ve fizik motorunu dikkate alır.
-        // Bu yöntem, hızlandırılmış hareketler veya atalet gibi fizik davranışlarını taklit eder.
-        // Yorum satırından kaldırarak deneyebilirsiniz:
-        // rigidbody.AddForce(vector);
-
-        // **3. Rigidbody2D.velocity**
-        // `velocity` nesnenin anlık hızını belirler ve hareketi doğrudan kontrol eder.
-        // Fizik motoruyla uyumludur ancak hız, kuvvet uygulamak yerine doğrudan değiştirilir.
-        rigidbody.linearVelocity = vector;
-
-        // Not: Yukarıdaki üç yöntemden yalnızca biri aynı anda kullanılmalıdır.
-        // Her biri farklı kullanım durumlarına uygundur.
+        // KullanÄ±cÄ± giriÅŸlerini sÃ¼rekli kontrol et ve ilgili hareket fonksiyonlarÄ±nÄ± Ã§aÄŸÄ±r.
+        HandleMovementWithVelocity();
+        HandleJump();
     }
 
-    // Çarpışma olaylarını işlemek için bir metot.
-    private void OnCollisionEnter2D(Collision2D collision)
+    // Velocity ile hareket fonksiyonu
+    public void HandleMovementWithVelocity()
     {
-        // Çarpışma olduğunda tetiklenecek işlemler buraya yazılabilir.
+        // Yatay eksendeki oyuncu girdi deÄŸerini alÄ±yoruz.
+        float x = Input.GetAxis("Horizontal") * speed;
+        // Hareket vektÃ¶rÃ¼ oluÅŸturuluyor.
+        Vector2 vector = new Vector2(x , rigidbody.linearVelocityY);
+
+        // HÄ±zÄ± doÄŸrudan deÄŸiÅŸtiriyoruz.
+        rigidbody.linearVelocity = vector;
+
+        // Not: Velocity doÄŸrudan hÄ±z belirler, fizik kurallarÄ±nÄ± uygular.
+    }
+
+    // AddForce ile hareket fonksiyonu
+    public void HandleMovementWithAddForce()
+    {
+        float x = Input.GetAxis("Horizontal");
+        // AddForce kullanÄ±larak kuvvet uygulanÄ±yor.
+        rigidbody.AddForce(new Vector2(x * 5, 0));
+
+        // Not: AddForce ile hareket, hÄ±zlanma ve atalet etkilerini dikkate alÄ±r.
+    }
+
+    // ZÄ±plama fonksiyonu
+    public void HandleJump()
+    {
+        // Zemin kontrolÃ¼
+        bool zemindemi = Physics2D.OverlapPoint(zeminKontrol.transform.position, groundLayer);
+
+        // EÄŸer oyuncu zemin Ã¼zerindeyse ve "Space" tuÅŸuna basÄ±ldÄ±ysa
+        if (Input.GetKeyDown(KeyCode.Space) && zemindemi)
+        {
+            // ZÄ±plama kuvveti uygulanÄ±yor.
+            rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+            // Not: AddForce ile zÄ±plama fizik motorunu kullanÄ±r.
+        }
+    }
+
+    // Translate ile hareket fonksiyonu
+    public void HandleMovementWithTranslate()
+    {
+        float x = Input.GetAxis("Horizontal");
+        // Hareket vektÃ¶rÃ¼ oluÅŸturuluyor.
+        Vector2 vector = new Vector2(x * 5, 0);
+
+        // Translate ile pozisyon doÄŸrudan deÄŸiÅŸtiriliyor.
+        transform.Translate(vector * Time.deltaTime);
+
+        // Not: Translate fizik motorunu dikkate almaz, Ã§arpÄ±ÅŸmalarÄ± iÅŸlemez.
     }
 }
