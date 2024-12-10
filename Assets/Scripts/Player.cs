@@ -43,10 +43,10 @@ public class Player : MonoBehaviour
         // Yatay eksende oyuncu girişini alıyoruz
         float x = Input.GetAxis("Horizontal") * speed;
         // Hareket vektörü oluşturuluyor
-        Vector2 vector = new Vector2(x, rb.velocity.y);
+        Vector2 vector = new Vector2(x, rb.linearVelocity.y);
 
         // Hızı doğrudan değiştiriyoruz
-        rb.velocity = vector;
+        rb.linearVelocity = vector;
 
         // Animator'da hareket hızına göre parametreyi güncelliyoruz
         animator.SetFloat("Velocity", Mathf.Abs(x));
@@ -110,6 +110,9 @@ public class Player : MonoBehaviour
             // Çift zıplama hakkı devre dışı bırakılıyor
             isDoubleJump = false;
         }
+
+        // Animator'da zıplama durumunu güncelliyoruz
+        animator.SetBool("IsJumping", !isGroundCheck);
     }
 
     // Hız arttırma fonksiyonu
