@@ -3,76 +3,139 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     // Rigidbody2D bileşeni referansı
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D rb;
+    // Animator bileşeni referansı
+    public Animator animator;
 
+    // Oyuncunun hareket hızı
     public float speed;
+    // Oyuncunun zıplama kuvveti
     public float jumpForce;
-    public GameObject zeminKontrol;
+    // Zemin kontrolü için kullanılan nesne
+    public GameObject groundCheck;
+    // Zemin olarak kabul edilen katman
     public LayerMask groundLayer;
 
+    // Çift zıplama hakkı kontrolü
+    private bool isDoubleJump = false;
+
+    // Oyunun başlangıcında çalışacak olan kodlar
     public void Start()
     {
-        // Oyun başladığında çalışacak olan başlangıç kodları burada yer alır.
-        rigidbody = GetComponent<Rigidbody2D>();
+        // Rigidbody2D bileşeni atanıyor
+        rb = GetComponent<Rigidbody2D>();
     }
 
+    // Her karede çalışacak kodlar
     public void Update()
     {
-        // Kullanıcı girişlerini sürekli kontrol et ve ilgili hareket fonksiyonlarını çağır.
-        HandleMovementWithVelocity();
-        HandleJump();
+        // Hareket fonksiyonu çağırılıyor
+        MovementWithVelocity();
+        // Zıplama fonksiyonu çağırılıyor
+        Jump();
+        // Hız arttırma fonksiyonu çağırılıyor
+        HighSpeed();
     }
 
     // Velocity ile hareket fonksiyonu
-    public void HandleMovementWithVelocity()
+    public void MovementWithVelocity()
     {
-        // Yatay eksendeki oyuncu girdi değerini alıyoruz.
+        // Yatay eksende oyuncu girişini alıyoruz
         float x = Input.GetAxis("Horizontal") * speed;
-        // Hareket vektörü oluşturuluyor.
-        Vector2 vector = new Vector2(x , rigidbody.linearVelocityY);
+        // Hareket vektörü oluşturuluyor
+        Vector2 vector = new Vector2(x, rb.velocity.y);
 
-        // Hızı doğrudan değiştiriyoruz.
-        rigidbody.linearVelocity = vector;
+        // Hızı doğrudan değiştiriyoruz
+        rb.velocity = vector;
 
-        // Not: Velocity doğrudan hız belirler, fizik kurallarını uygular.
+        // Animator'da hareket hızına göre parametreyi güncelliyoruz
+        animator.SetFloat("Velocity", Mathf.Abs(x));
+
+        // Karakterin yüz yönünü ayarlıyoruz
+        if (x > 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (x < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, -180, 0);
+        }
     }
 
     // AddForce ile hareket fonksiyonu
-    public void HandleMovementWithAddForce()
+    public void MovementWithAddForce()
     {
+        // Yatay eksende oyuncu girişini alıyoruz
         float x = Input.GetAxis("Horizontal");
-        // AddForce kullanılarak kuvvet uygulanıyor.
-        rigidbody.AddForce(new Vector2(x * 5, 0));
-
-        // Not: AddForce ile hareket, hızlanma ve atalet etkilerini dikkate alır.
+        // AddForce kullanarak kuvvet uyguluyoruz
+        rb.AddForce(new Vector2(x * speed, 0));
     }
 
     // Zıplama fonksiyonu
-    public void HandleJump()
+    public void Jump()
     {
-        // Zemin kontrolü
-        bool zemindemi = Physics2D.OverlapPoint(zeminKontrol.transform.position, groundLayer);
+        // Karakterin zeminde olup olmadığını kontrol ediyoruz
+        bool isGroundCheck = Physics2D.OverlapPoint(groundCheck.transform.position, groundLayer);
 
-        // Eğer oyuncu zemin üzerindeyse ve "Space" tuşuna basıldıysa
-        if (Input.GetKeyDown(KeyCode.Space) && zemindemi)
+        // Eğer oyuncu zeminde ve Space tuşuna basılmışsa
+        if (Input.GetKeyDown(KeyCode.Space) && isGroundCheck)
         {
-            // Zıplama kuvveti uygulanıyor.
-            rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            // Zıplama kuvveti uygulanıyor
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
 
-            // Not: AddForce ile zıplama fizik motorunu kullanır.
+        // Animator'da zıplama durumunu güncelliyoruz
+        animator.SetBool("IsJumping", !isGroundCheck);
+    }
+
+    // Çift zıplama fonksiyonu
+    public void DoubleJump()
+    {
+        // Karakterin zeminde olup olmadığını kontrol ediyoruz
+        bool isGroundCheck = Physics2D.OverlapPoint(groundCheck.transform.position, groundLayer);
+
+        // Eğer oyuncu zeminde ve Space tuşuna basılmışsa
+        if (Input.GetKeyDown(KeyCode.Space) && isGroundCheck)
+        {
+            // İlk zıplama kuvveti uygulanıyor
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            // Çift zıplama hakkı aktif hale getiriliyor
+            isDoubleJump = true;
+        }
+        // Eğer oyuncu havadaysa ve çift zıplama hakkı varsa
+        else if (Input.GetKeyDown(KeyCode.Space) && isDoubleJump)
+        {
+            // İkinci kez zıplama kuvveti uygulanıyor
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            // Çift zıplama hakkı devre dışı bırakılıyor
+            isDoubleJump = false;
+        }
+    }
+
+    // Hız arttırma fonksiyonu
+    public void HighSpeed()
+    {
+        // Sol Shift tuşuna basıldığında hız iki katına çıkarılıyor
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed = speed * 2;
+        }
+        // Sol Shift tuşu bırakıldığında hız normale dönüyor
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed = speed / 2;
         }
     }
 
     // Translate ile hareket fonksiyonu
-    public void HandleMovementWithTranslate()
+    public void MovementWithTranslate()
     {
+        // Yatay eksende oyuncu girişini alıyoruz
         float x = Input.GetAxis("Horizontal");
-        // Hareket vektörü oluşturuluyor.
+        // Hareket vektörü oluşturuluyor
         Vector2 vector = new Vector2(x * 5, 0);
 
-        // Translate ile pozisyon doğrudan değiştiriliyor.
+        // Translate ile pozisyon doğrudan değiştiriliyor
         transform.Translate(vector * Time.deltaTime);
-
-        // Not: Translate fizik motorunu dikkate almaz, çarpışmaları işlemez.
     }
 }
