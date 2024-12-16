@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
         Vector3 desiredPosition = target.position + Vector3.back; // Kamerayý hedefin arkasýnda konumlandýr
 
         // Kameranýn mevcut pozisyonu ile istenen pozisyon arasýnda yumuþak bir geçiþ saðla
-        Vector3 smootPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
+        Vector3 smootPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
 
         // Kameranýn pozisyonunu yumuþak geçiþ yapýlan pozisyona ayarla
         transform.position = smootPosition;

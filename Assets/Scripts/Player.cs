@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
         // Hareket fonksiyonu çağırılıyor
         MovementWithVelocity();
         // Zıplama fonksiyonu çağırılıyor
-        Jump();
+        DoubleJump();
         // Hız arttırma fonksiyonu çağırılıyor
         HighSpeed();
     }
@@ -106,7 +106,7 @@ public class Player : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Space) && isDoubleJump)
         {
             // İkinci kez zıplama kuvveti uygulanıyor
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            rb.AddForce(Vector2.up / 1.5f * jumpForce, ForceMode2D.Impulse);
             // Çift zıplama hakkı devre dışı bırakılıyor
             isDoubleJump = false;
         }
