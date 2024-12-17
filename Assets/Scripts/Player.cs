@@ -19,6 +19,9 @@ public class Player : MonoBehaviour
     // Çift zıplama hakkı kontrolü
     private bool isDoubleJump = false;
 
+    public int health;
+    private bool isDeath = false;
+
     // Oyunun başlangıcında çalışacak olan kodlar
     public void Start()
     {
@@ -29,6 +32,7 @@ public class Player : MonoBehaviour
     // Her karede çalışacak kodlar
     public void Update()
     {
+        if (isDeath) return;
         // Hareket fonksiyonu çağırılıyor
         MovementWithVelocity();
         // Zıplama fonksiyonu çağırılıyor
@@ -141,4 +145,30 @@ public class Player : MonoBehaviour
         // Translate ile pozisyon doğrudan değiştiriliyor
         transform.Translate(vector * Time.deltaTime);
     }
+
+    // Oyuncunun düşmanla çarpıştığında can kaybetmesini ve ölüm durumunu kontrol eden metod.
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Eğer çarpışılan nesnenin etiketi "Enemy" ise:
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            // Oyuncunun canını 5 azalt.
+            health -= 5;
+
+            // Oyuncunun "Hit" animasyonunu oynatmak için "Hit" tetikleyicisini (Trigger) aktif et.
+            animator.SetTrigger("Hit");
+
+            // Eğer can 0 veya altına düşerse:
+            if (health <= 0)
+            {
+                // Oyuncunun öldüğünü belirtmek için isDeath değişkenini true yap.
+                isDeath = true;
+
+                // "IsDeath" parametresini true yaparak ölüm animasyonunu başlat.
+                animator.SetBool("IsDeath", isDeath);
+            }
+        }
+    }
+
 }
