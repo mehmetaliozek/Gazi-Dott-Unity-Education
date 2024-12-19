@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
     public int health;
     private bool isDeath = false;
 
+    public GameObject pausePanel;
+
     // Oyunun başlangıcında çalışacak olan kodlar
     public void Start()
     {
@@ -39,6 +41,21 @@ public class Player : MonoBehaviour
         DoubleJump();
         // Hız arttırma fonksiyonu çağırılıyor
         HighSpeed();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            switch (Time.timeScale)
+            {
+                case 0:
+                    Time.timeScale = 1;
+                    pausePanel.SetActive(false);
+                    break;
+                case 1:
+                    Time.timeScale = 0;
+                    pausePanel.SetActive(true);
+                    break;
+            }
+        }
     }
 
     // Velocity ile hareket fonksiyonu
